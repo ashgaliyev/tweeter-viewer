@@ -14,5 +14,5 @@ loop = do
   putStrLn "Please, type keyword for seach in twitter or q for quit: "
   kw <- getLine
   case getKeyword (words kw) of
-    Left str ->  putStrLn str
+    Left str ->  putStrLn str >> putStrLn "Try again." >> loop
     Right x -> if x == "q" then putStrLn "Bye!" else  someFunc x >> loop
