@@ -63,8 +63,8 @@ getCredentials = do
 getBase64BearerCredentials :: Credentials -> C.ByteString
 getBase64BearerCredentials Credentials {consumerKey = a, consumerSecret = b} = B64.encode $ C.pack (a ++ ":" ++ b)
 
-someFunc :: IO ()
-someFunc = do
+someFunc :: String -> IO ()
+someFunc keyword = do
   credentials <- getCredentials
   case credentials of
     Nothing -> putStrLn ("config.local doesn't exist or has invalid format" :: String)
@@ -75,7 +75,7 @@ someFunc = do
         Nothing -> putStrLn ("Nothing 1" :: String)
         Just token -> do
           let n_opts = defaults & header "Authorization" .~ [C.pack $ "Bearer " ++ T.unpack token]
-          d <- getWith n_opts ("https://api.twitter.com/1.1/search/tweets.json?q=" ++ "golang")
+          d <- getWith n_opts ("https://api.twitter.com/1.1/search/tweets.json?q=" ++ keyword)
           case getTweetsFromResponse d of
             Left str -> putStrLn str
             Right xs -> putStrLn $ show xs
